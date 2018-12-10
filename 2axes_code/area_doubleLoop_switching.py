@@ -16,11 +16,12 @@ steps = 10
 txt = 'vfonts'
 f_name = 'Skia-Regular'
 
+axes = ['wght', 'wdth'] 
 
-wght_min = listFontVariations(f_name)['wght']['minValue']
-wght_max = listFontVariations(f_name)['wght']['maxValue']
-wdth_min = listFontVariations(f_name)['wdth']['minValue']
-wdth_max = listFontVariations(f_name)['wdth']['maxValue']
+axis1_min = listFontVariations(f_name)[axes[0]]['minValue']
+axis1_max = listFontVariations(f_name)[axes[0]]['maxValue']
+axis2_min = listFontVariations(f_name)[axes[1]]['minValue']
+axis2_max = listFontVariations(f_name)[axes[1]]['maxValue']
 
 
 axis_w = p_w - 2 * margin
@@ -47,14 +48,17 @@ def a_page():
 
     fontSize(32)
     font(f_name)
-
-    fontVariations(wght = wght_min, wdth = wdth_min )
+    var_values = { axes[0] : axis1_min, axes[1] : axis2_min }
+    fontVariations( **var_values )
     text('a', (0, -20), align ='center')
-    fontVariations(wght = wght_max, wdth = wdth_min )
+    var_values = { axes[0] : axis1_max, axes[1] : axis2_min }
+    fontVariations( **var_values )
     text('a', (axis_w, -20), align ='center')
-    fontVariations(wght = wght_min, wdth = wdth_max )
+    var_values = { axes[0] : axis1_min, axes[1] : axis2_max }
+    fontVariations( **var_values )
     text('a', (0, axis_h + 8),align ='center')
-    fontVariations(wght = wght_max, wdth = wdth_max )
+    var_values = { axes[0] : axis1_max, axes[1] : axis2_max }
+    fontVariations( **var_values )
     text('a', (axis_w, axis_h + 8),align ='center')
 
     fontSize(120)
@@ -90,10 +94,9 @@ for x in range(steps+1):
 
         fill(0, .8)
 
-        curr_wght = map_val(px, 0, axis_w, wght_min, wght_max)
-        curr_wdth = map_val(py, 0, axis_h, wdth_min, wdth_max)
-    
-        fontVariations(wght = curr_wght, wdth = curr_wdth )
+        var_values = { axes[0] : map_val(px, 0, axis_w, axis1_min, axis1_max), axes[1] : map_val(py, 0, axis_h, axis2_min, axis2_max) }
+
+        fontVariations( **var_values )
         text(txt, (axis_w/2, axis_h/2), align='center')
 
         # saveImage('../imgs/%.3d.png' % pageCount())    

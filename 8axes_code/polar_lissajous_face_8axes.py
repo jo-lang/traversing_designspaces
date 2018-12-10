@@ -92,17 +92,8 @@ for st in range(steps+1):
         oval(x - dot_s/2, y - dot_s/2, dot_s, dot_s)
         dots.append( (x,y) )
 
-    fontVariations(
-        LEBR = ip(axes['LEBR']['minValue'], axes['LEBR']['maxValue'], vals[0]), 
-        LEEH = ip(axes['LEEH']['minValue'], axes['LEEH']['maxValue'], vals[1]), 
-        LEEY = ip(axes['LEEY']['minValue'], axes['LEEY']['maxValue'], vals[2]), 
-        MOUT = ip(axes['MOUT']['minValue'], axes['MOUT']['maxValue'], vals[3]), 
-        NOSE = ip(axes['NOSE']['minValue'], axes['NOSE']['maxValue'], vals[4]), 
-        RIBR = ip(axes['RIBR']['minValue'], axes['RIBR']['maxValue'], vals[5]), 
-        RIEH = ip(axes['RIEH']['minValue'], axes['RIEH']['maxValue'], vals[6]), 
-        RIEY = ip(axes['RIEY']['minValue'], axes['RIEY']['maxValue'], vals[7]), 
-
-    )
+    var_values = { axis : ip(axes[axis]['minValue'], axes[axis]['maxValue'], vals[a]) for a, axis in enumerate(axes) }
+    fontVariations(**var_values)
 
 
     fill(0, .05)

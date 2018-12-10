@@ -83,14 +83,9 @@ for st in range(steps):
         vals.append(x)
         oval(x - dot_s/2, a * (axis_l/(len(axes)-1))- dot_s/2, dot_s, dot_s)
 
-    fontVariations(
-        ANLE = map_val(vals[0], 0, axis_l, axes['ANLE']['minValue'], axes['ANLE']['maxValue']), 
-        ANRI = map_val(vals[1], 0, axis_l, axes['ANRI']['minValue'], axes['ANRI']['maxValue']), 
-        WELE = map_val(vals[2], 0, axis_l, axes['WELE']['minValue'], axes['WELE']['maxValue']), 
-        WERI = map_val(vals[3], 0, axis_l, axes['WERI']['minValue'], axes['WERI']['maxValue']), 
-        WECE = map_val(vals[4], 0, axis_l, axes['WECE']['minValue'], axes['WECE']['maxValue']), 
-        HECE = map_val(vals[5], 0, axis_l, axes['HECE']['minValue'], axes['HECE']['maxValue']), 
-    )
+    var_values = { axis : map_val(vals[a], 0, axis_l, axes[axis]['minValue'], axes[axis]['maxValue']) for a, axis in enumerate(axes) }
+
+    fontVariations(**var_values)
 
     fill(0, .05)
     fill(None)

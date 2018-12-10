@@ -17,11 +17,13 @@ steps = 40
 txt = 'vfonts'
 f_name = 'Skia-Regular'
 
-wght_min = listFontVariations(f_name)['wght']['minValue']
-wght_max = listFontVariations(f_name)['wght']['maxValue']
+axes = ['wght', 'wdth'] 
 
-wdth_min = listFontVariations(f_name)['wdth']['minValue']
-wdth_max = listFontVariations(f_name)['wdth']['maxValue']
+axis1_min = listFontVariations(f_name)[axes[0]]['minValue']
+axis1_max = listFontVariations(f_name)[axes[0]]['maxValue']
+
+axis2_min = listFontVariations(f_name)[axes[1]]['minValue']
+axis2_max = listFontVariations(f_name)[axes[1]]['maxValue']
 
 axis_w = p_w - 2 * margin
 axis_h = p_h - 2 * margin
@@ -51,13 +53,17 @@ def a_page():
     fontSize(32)
     font(f_name)
 
-    fontVariations(wght = wght_min, wdth = wdth_min )
+    var_values = { axes[0] : axis1_min, axes[1] : axis2_min }
+    fontVariations( **var_values )
     text('a', (0, -20), align ='center')
-    fontVariations(wght = wght_max, wdth = wdth_min )
+    var_values = { axes[0] : axis1_max, axes[1] : axis2_min }
+    fontVariations( **var_values )
     text('a', (axis_w, -20), align ='center')
-    fontVariations(wght = wght_min, wdth = wdth_max )
+    var_values = { axes[0] : axis1_min, axes[1] : axis2_max }
+    fontVariations( **var_values )
     text('a', (0, axis_h + 8),align ='center')
-    fontVariations(wght = wght_max, wdth = wdth_max )
+    var_values = { axes[0] : axis1_max, axes[1] : axis2_max }
+    fontVariations( **var_values )
     text('a', (axis_w, axis_h + 8),align ='center')
 
     fontSize(120)
@@ -72,19 +78,18 @@ for st in range(steps+1):
     a_page()
     factor = st/steps
 
-    x = ip(wdth_min, wdth_max, factor)
-    y = lucas(wght_min, wght_max, st, (steps+1))
+    x = ip(axis1_min, axis1_max, factor)
+    y = lucas(axis2_min, axis2_max, st, (steps+1))
 
-    pts.append((factor * axis_w, map_val(y, wght_min, wght_max, 0, axis_h)))
+    pts.append((factor * axis_w, map_val(y, axis2_min, axis2_max, 0, axis_h)))
     for px, py in pts:
         fill(1, 0, 0)
         oval(px - dia/2, py - dia/2, dia, dia)
 
     fill(0, .9)
-    curr_wght = y
-    curr_wdth = x
+    var_values = { axes[0] : x, axes[1] : y }
     
-    fontVariations(wght = curr_wght, wdth = curr_wdth )
+    fontVariations(**var_values)
     text(txt, (axis_w/2, axis_h/2), align = 'center')
 
     # saveImage('../imgs/%.3d.png' % st)    

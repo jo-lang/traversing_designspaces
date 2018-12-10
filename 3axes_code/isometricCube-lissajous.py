@@ -30,14 +30,17 @@ pts = [(sin( a * angle * st + delta ), sin( b * angle * st ), sin( c * angle * s
 
 f_name = '../fonts/hope.ttf'
 
-wght_min = listFontVariations(f_name)['wght']['minValue']
-wght_max = listFontVariations(f_name)['wght']['maxValue']
+var_info_dict = listFontVariations(f_name)
 
-wdth_min = listFontVariations(f_name)['wdth']['minValue']
-wdth_max = listFontVariations(f_name)['wdth']['maxValue']
 
-CONT_min = listFontVariations(f_name)['CONT']['minValue']
-CONT_max = listFontVariations(f_name)['CONT']['maxValue']
+print ('Possible variable axes: ', ', '.join([k for k in var_info_dict.keys()]))
+
+# define a list of three axis tags
+axes = ['wght', 'wdth', 'CONT'] 
+# or just use the dictionary 
+# axes = var_info_dict.keys()
+extremes = [(var_info_dict[a]['minValue'], var_info_dict[a]['maxValue']) for a in axes ]
+assert len(axes) == 3, 'The axes should be limited to three. Currently there are %d.' % len(axes)
 
 # for k, v in listFontVariations(f_name).items(): print (k,v)
 
@@ -151,12 +154,10 @@ for st in range(steps):
     
     x, y, z = pts[st]
     
-    curr_wght = map_val(x, -1, 1, wght_min, wght_max)
-    curr_wdth = map_val(y, -1, 1, wdth_min, wdth_max)
-    curr_CONT = map_val(z, -1, 1, CONT_min, CONT_max)
+    var_values = { axis : map_val(pts[st][i], -1, 1, extremes[i][0], extremes[i][1])  for i, axis in enumerate(axes) }
     
     fill(0, .8)
     font(f_name)
-    fontVariations(CONT = curr_CONT, wght = curr_wght, wdth = curr_wdth) 
+    fontVariations(**var_values) 
     text('hope', (0, 0), align = 'center')
 

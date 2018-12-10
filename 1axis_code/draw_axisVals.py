@@ -50,11 +50,12 @@ for axis in axes:
         text('%.3f' % curr_val, (x, 12), align = 'center')
         text('%s' % val, (x, -42), align = 'center')
 
+        var_values = { axis : curr_val }
+
         with savedState():
             font(f_name)
             fontSize(24)
-            if axis == 'wght': fontVariations( wght = curr_val )
-            if axis == 'wdth': fontVariations( wdth = curr_val )
+            fontVariations( ** var_values )
             text('a', (x, -24), align = 'center')
 
     

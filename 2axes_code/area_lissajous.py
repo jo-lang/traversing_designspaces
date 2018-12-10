@@ -20,19 +20,23 @@ delta = 0 # pi/2, pi/3, pi/4
 
 f_name = "Skia-Regular"
 
-wght_min = listFontVariations(f_name)['wght']['minValue']
-wght_def = listFontVariations(f_name)['wght']['defaultValue']
-wght_max = listFontVariations(f_name)['wght']['maxValue']
+axes = ['wght', 'wdth'] 
 
-wdth_min = listFontVariations(f_name)['wdth']['minValue']
-wdth_def = listFontVariations(f_name)['wdth']['defaultValue']
-wdth_max = listFontVariations(f_name)['wdth']['maxValue']
+# --------
+axis1_min = listFontVariations(f_name)[axes[0]]['minValue']
+axis1_def = listFontVariations(f_name)[axes[0]]['defaultValue']
+axis1_max = listFontVariations(f_name)[axes[0]]['maxValue']
+
+axis2_min = listFontVariations(f_name)[axes[1]]['minValue']
+axis2_def = listFontVariations(f_name)[axes[1]]['defaultValue']
+axis2_max = listFontVariations(f_name)[axes[1]]['maxValue']
+
 
 axis_w = p_w - 2 * margin
 axis_h = p_h - 2 * margin
 
-def_x = map_val(wght_def, wght_min, wght_max, 0, axis_w)
-def_y = map_val(wdth_def, wdth_min, wdth_max, 0, axis_h)
+def_x = map_val(axis1_def, axis1_min, axis1_max, 0, axis_w)
+def_y = map_val(axis2_def, axis2_min, axis2_max, 0, axis_h)
 
 # --------------------------
 #  functions 
@@ -57,11 +61,11 @@ def a_page():
 
     oval(-dia/2 + def_x, -dia/2 + def_y, dia, dia)
     
-    text('%.4f' % wght_min, (0 - 14, -12))
-    text('%.4f' % wght_max, (axis_w - 14, -12))
+    text('%.4f' % axis1_min, (0 - 14, -12))
+    text('%.4f' % axis1_max, (axis_w - 14, -12))
 
-    text('%.4f' % wdth_min, (-33, -3))
-    text('%.4f' % wdth_max, (-33, axis_h -3))
+    text('%.4f' % axis2_min, (-33, -3))
+    text('%.4f' % axis1_max, (-33, axis_h -3))
 
     font(f_name)
     fontSize(120)
@@ -86,17 +90,17 @@ for st in range(steps):
         fill(1, 0, 0)
         oval(px*axis_w - dia/2, py*axis_h - dia/2, dia, dia)
 
-    curr_wght = ip(wght_min, wght_max, x)
-    curr_wdth = ip(wdth_min, wdth_max, y)
-    
-    fontVariations(wght = curr_wght, wdth = curr_wdth )
+    curr_axis1 = ip(axis1_min, axis1_max, x)
+    curr_axis2 = ip(axis2_min, axis2_max, y)
+    var_values = { axes[0] : curr_axis1, axes[1] : curr_axis2 }    
+    fontVariations(**var_values)
     fill(0, .8)
     text('vFonts', (axis_w/2, axis_h/2), align = 'center')
     
     fontVariations(resetVariations=True)
     font('LucidaGrande')
     fontSize(8)
-    text('%.4f' % curr_wght, (px*axis_w - 14, -24))
-    text('%.4f' % curr_wdth, (- 33, py*axis_h -3))
+    text('%.4f' % curr_axis1, (px*axis_w - 14, -24))
+    text('%.4f' % curr_axis2, (- 33, py*axis_h -3))
 
-    # saveImage('~/Desktop/imgs/%.3d.png' % st)
+    # saveImage('../imgs/%.3d.png' % st)

@@ -4,6 +4,7 @@
 import math, itertools, sys
 sys.path.append("..")
 from helper_functions import *
+from itertools import product
 
 # --------------------------
 #  settings
@@ -19,14 +20,16 @@ steps = 16
 
 f_name = '../fonts/hope.ttf'
 
-wght_min = listFontVariations(f_name)['wght']['minValue']
-wght_max = listFontVariations(f_name)['wght']['maxValue']
+var_info_dict = listFontVariations(f_name)
 
-wdth_min = listFontVariations(f_name)['wdth']['minValue']
-wdth_max = listFontVariations(f_name)['wdth']['maxValue']
+axes = var_info_dict.keys()
+print ('Possible variable axes: ', ', '.join([k for k in var_info_dict.keys()]))
 
-CONT_min = listFontVariations(f_name)['CONT']['minValue']
-CONT_max = listFontVariations(f_name)['CONT']['maxValue']
+axes = ['wght', 'wdth', 'CONT'] 
+
+extremes = [(listFontVariations(f_name)[a]['minValue'], listFontVariations(f_name)[a]['maxValue']) for a in axes ]
+
+assert len(axes) == 3, 'The axes should be limited to three. Currently there are %d.' % len(axes)
 
 
 # --------------------------
@@ -113,29 +116,10 @@ def a_cube(s, alpha, beta):
     font(f_name)
     fontSize(30)
 
-    fontVariations(wght = wght_max, wdth = wdth_max, CONT = CONT_max )
-    text('e', convPoint( (  s/2 + 10,  s/2 + 10,  s/2 + 10), alpha, beta ), align = 'center')
-
-    fontVariations(wght = wght_max, wdth = wdth_max, CONT = CONT_min )
-    text('e', convPoint( (  s/2 + 10,  s/2 + 10, -s/2 - 10), alpha, beta ), align = 'center')
-
-    fontVariations(wght = wght_max, wdth = wdth_min, CONT = CONT_max )
-    text('e', convPoint( (  s/2 + 10, -s/2 - 10,  s/2 + 10), alpha, beta ), align = 'center')
-
-    fontVariations(wght = wght_max, wdth = wdth_min, CONT = CONT_min )
-    text('e', convPoint( (  s/2 + 10, -s/2 - 10, -s/2 - 10), alpha, beta ), align = 'center')
-
-    fontVariations(wght = wght_min, wdth = wdth_max, CONT = CONT_max )
-    text('e', convPoint( ( -s/2 - 10,  s/2 + 10,  s/2 + 10), alpha, beta ), align = 'center')
-
-    fontVariations(wght = wght_min, wdth = wdth_max, CONT = CONT_min )
-    text('e', convPoint( ( -s/2 - 10,  s/2 + 10, -s/2 - 10), alpha, beta ), align = 'center')
-
-    fontVariations(wght = wght_min, wdth = wdth_min, CONT = CONT_max )
-    text('e', convPoint( ( -s/2 - 10, -s/2 - 10,  s/2 + 10), alpha, beta ), align = 'center')
-
-    fontVariations(wght = wght_min, wdth = wdth_min, CONT = CONT_min )
-    text('e', convPoint( ( -s/2 - 10, -s/2 - 10, -s/2 - 10), alpha, beta ), align = 'center')
+    for c in product([-1, 1], repeat=3):    
+        var_values = {axis : extremes[a][0] if c[a] != 1 else extremes[a][1] for a, axis in enumerate(axes)}
+        fontVariations(**var_values)
+        text('e', convPoint((map(lambda x: (x * s/2 + x * 10), c)), alpha, beta ), align = 'center')
 
 
 def a_page():
@@ -154,7 +138,7 @@ def a_page():
 # --------------------------
 #  drawings
 
-cube_points = [ (x, y, z) for x in [-1, 1] for y in [-1, 1] for z in [-1, 1] ]
+cube_points = list(product([-1, 1], repeat=3))
 combis = list(itertools.permutations(cube_points, len(cube_points)))
 
 print ('%d possible paths to visit all corners of a cube.' % len(combis))
@@ -191,16 +175,15 @@ for p, point in enumerate(selected_order):
         f = .5 + .5 * cos(st/steps * pi + pi)
 
         x, y, z = ip(x2, x1, f), ip(y2, y1, f), ip(z2, z1, f)
+        p = x, y, z
         
         plot_x, plot_y = convPoint( (x * cube_s/2, y * cube_s/2, z * cube_s/2), alpha, beta )
         oval(plot_x - dia/2, plot_y - dia/2, dia, dia)
 
-        curr_wght = map_val(x, -1, 1, wght_min, wght_max)
-        curr_wdth = map_val(y, -1, 1, wdth_min, wdth_max)
-        curr_CONT = map_val(z, -1, 1, CONT_min, CONT_max)
-    
+        var_values = { axis : map_val(p[i], -1, 1, extremes[i][0], extremes[i][1]) for i, axis in enumerate(axes) }
+        
         fill(0, .8)
-        fontVariations(CONT = curr_CONT, wght = curr_wght, wdth = curr_wdth) 
+        fontVariations( **var_values) 
         text('hope', (0, 0), align = 'center')
 
         # saveImage( '~/Desktop/imgs/%.3d.png' % page_count )

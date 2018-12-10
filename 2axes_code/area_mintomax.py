@@ -19,13 +19,16 @@ f_name = 'Skia-Regular'
 axis_w = p_w - 2 * margin
 axis_h = p_h - 2 * margin
 
-wght_min = listFontVariations(f_name)['wght']['minValue']
-wght_def = listFontVariations(f_name)['wght']['defaultValue']
-wght_max = listFontVariations(f_name)['wght']['maxValue']
+axes = ['wght', 'wdth'] 
 
-wdth_min = listFontVariations(f_name)['wdth']['minValue']
-wdth_def = listFontVariations(f_name)['wdth']['defaultValue']
-wdth_max = listFontVariations(f_name)['wdth']['maxValue']
+# --------
+axis1_min = listFontVariations(f_name)[axes[0]]['minValue']
+axis1_def = listFontVariations(f_name)[axes[0]]['defaultValue']
+axis1_max = listFontVariations(f_name)[axes[0]]['maxValue']
+
+axis2_min = listFontVariations(f_name)[axes[1]]['minValue']
+axis2_def = listFontVariations(f_name)[axes[1]]['defaultValue']
+axis2_max = listFontVariations(f_name)[axes[1]]['maxValue']
 
 
 # --------------------------
@@ -66,8 +69,8 @@ for st in range(steps):
     a_page()
     factor = st/steps
 
-    x = ip(wght_min, wght_max, factor)
-    y = ip(wdth_min, wdth_max, factor)
+    x = ip(axis1_min, axis1_max, factor)
+    y = ip(axis2_min, axis2_max, factor)
 
     pts.append((factor * axis_w, factor * axis_h))
     for px, py in pts:
@@ -75,10 +78,9 @@ for st in range(steps):
         oval(px - dia/2, py - dia/2, dia, dia)
 
     fill(0, .8)
-    curr_wght = x
-    curr_wdth = y
+    var_values = { axes[0] : x, axes[1] : y }
     
-    fontVariations(wght = curr_wght, wdth = curr_wdth)
+    fontVariations(**var_values)
     text(txt, (axis_w/2, axis_h/2), align = 'center')
     
     

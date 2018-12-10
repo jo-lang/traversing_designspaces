@@ -16,13 +16,16 @@ steps = 40
 txt = 'vfonts'
 f_name = 'Skia-Regular'
 
-wght_min = listFontVariations(f_name)['wght']['minValue']
-wght_def = listFontVariations(f_name)['wght']['defaultValue']
-wght_max = listFontVariations(f_name)['wght']['maxValue']
+axes = ['wght', 'wdth'] 
 
-wdth_min = listFontVariations(f_name)['wdth']['minValue']
-wdth_def = listFontVariations(f_name)['wdth']['defaultValue']
-wdth_max = listFontVariations(f_name)['wdth']['maxValue']
+# --------
+axis1_min = listFontVariations(f_name)[axes[0]]['minValue']
+axis1_def = listFontVariations(f_name)[axes[0]]['defaultValue']
+axis1_max = listFontVariations(f_name)[axes[0]]['maxValue']
+
+axis2_min = listFontVariations(f_name)[axes[1]]['minValue']
+axis2_def = listFontVariations(f_name)[axes[1]]['defaultValue']
+axis2_max = listFontVariations(f_name)[axes[1]]['maxValue']
 
 axis_w = p_w - 2 * margin
 axis_h = p_h - 2 * margin
@@ -51,14 +54,20 @@ def a_page():
 
     font(f_name)
     fontSize(32)
-    fontVariations(wght = wght_min, wdth = wdth_min )
+
+    var_values = { axes[0] : axis1_min, axes[1] : axis2_min }
+    fontVariations( **var_values )
     text('a', (0, -20), align ='center')
-    fontVariations(wght = wght_max, wdth = wdth_min )
+    var_values = { axes[0] : axis1_max, axes[1] : axis2_min }
+    fontVariations( **var_values )
     text('a', (axis_w, -20), align ='center')
-    fontVariations(wght = wght_min, wdth = wdth_max )
+    var_values = { axes[0] : axis1_min, axes[1] : axis2_max }
+    fontVariations( **var_values )
     text('a', (0, axis_h + 8),align ='center')
-    fontVariations(wght = wght_max, wdth = wdth_max )
+    var_values = { axes[0] : axis1_max, axes[1] : axis2_max }
+    fontVariations( **var_values )
     text('a', (axis_w, axis_h + 8),align ='center')
+
     fontSize(120)
 
 
@@ -79,11 +88,12 @@ for st in range(steps+1):
         fill(1, 0, 0)
         oval(px - dia/2, py - dia/2, dia, dia)
 
-    curr_wght = map_val(x, 0, axis_w, wght_min, wght_max)
-    curr_wdth = map_val(y, 0, axis_h, wdth_min, wdth_max)
 
     fill(0, .75)
-    fontVariations(wght = curr_wght, wdth = curr_wdth )
+    var_values = { axes[0] : map_val(x, 0, axis_w, axis1_min, axis1_max), axes[1] : map_val(y, 0, axis_h, axis2_min, axis2_max) }
+    
+    fontVariations( **var_values )
+
     text('vfont', (axis_w/2, axis_h/2), align = 'center')
     
     fill(0, 1, 0)

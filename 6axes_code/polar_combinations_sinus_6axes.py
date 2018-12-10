@@ -94,14 +94,10 @@ for c, combi in enumerate(combis):
             oval(x - dot_s/2, y - dot_s/2, dot_s, dot_s)
             dots.append((x, y))
 
-        fontVariations(
-            ANLE = ip(axes['ANLE']['minValue'], axes['ANLE']['maxValue'], vals[0]), 
-            ANRI = ip(axes['ANRI']['minValue'], axes['ANRI']['maxValue'], vals[1]), 
-            WELE = ip(axes['WELE']['minValue'], axes['WELE']['maxValue'], vals[2]), 
-            WERI = ip(axes['WERI']['minValue'], axes['WERI']['maxValue'], vals[3]), 
-            WECE = ip(axes['WECE']['minValue'], axes['WECE']['maxValue'], vals[4]), 
-            HECE = ip(axes['HECE']['minValue'], axes['HECE']['maxValue'], vals[5]), 
-        )
+
+        var_values = { axis : ip(axes[axis]['minValue'], axes[axis]['maxValue'], vals[a]) for a, axis in enumerate(axes) }
+
+        fontVariations(**var_values)
 
         font(font_name)
         fontSize(120)
