@@ -139,24 +139,24 @@ The following is the simplest path visiting all 64 extremes of the designspace w
 
 ### Polar with sinus wave of each axis
 Each axis value loops through the full axis with the same sinus wave but has a different starting point.  
-[polar_sinus_varA_6axis.py](6axes_code/polar_sinus_varA_6axis.py)  
+[polar_sinus_varA_6axes.py](6axes_code/polar_sinus_varA_6axes.py)  
 
 ![sinus interpolation](images/polar_A_sinus_6axes.gif)
 
 ### Slider list with sinus wave for each axis
 This is like the above animation but the axes are not arranged around a center point but listed in a traditional way.  
-[sliders_sinus_varA_6axis.py](6axes_code/sliders_sinus_varA_6axis.py)
+[sliders_sinus_varA_6axes.py](6axes_code/sliders_sinus_varA_6axes.py)
 
 ![sinus interpolation horizontal sliders](images/sliders_A_sinus.gif)
 
 ### Bezier path polar chart
-Each axis value goes from the minimum to the maximum value following a bezier path with random generated offcurve points.
-[polar_bezier_ownVarFont_6axis.py](6axes_code/polar_bezier_ownVarFont_6axis.py)  
+Each axis value goes from the minimum to the maximum value following a bezier path with random generated offcurve points.  
+[polar_bezier_ownVarFont_6axes.py](6axes_code/polar_bezier_ownVarFont_6axes.py)  
 
 ![Polar chart of Lissajous 8 axes interpolation](images/polar_A_bezier_6axes.gif)   
 
 ### Lissajous
-Again the lissajous wave can be extended with more coordinates and these coordinates can be mapped to the values of the variable font axes.
+Again the lissajous wave can be extended with more coordinates and these coordinates can be mapped to the values of the variable font axes.  
 
 [polar_lissajous_6axes.py](6axes_code/polar_lissajous_6axes.py)  
 
